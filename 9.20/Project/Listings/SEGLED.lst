@@ -1,0 +1,120 @@
+C51 COMPILER V9.57.0.0   SEGLED                                                            09/20/2020 12:04:25 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE SEGLED
+OBJECT MODULE PLACED IN .\Objects\SEGLED.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE ..\FsBSP\src\SEGLED.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\FsBSP\inc;..\US
+                    -ER) DEBUG OBJECTEXTEND PRINT(.\Listings\SEGLED.lst) TABS(2) OBJECT(.\Objects\SEGLED.obj)
+
+line level    source
+
+   1          #include "SEGLED.h"
+   2          
+   3          u8 code segtab[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   4          
+   5          void Delay1ms()   //@12.000MHz
+   6          {
+   7   1        unsigned char i, j;
+   8   1        i = 12;
+   9   1        j = 169;
+  10   1        do
+  11   1        {
+  12   2          while (--j);
+  13   2        } while (--i);
+  14   1      }
+  15          
+  16          void segdisp(u8 *process , u8 *flash)
+  17          {
+  18   1        u8 bsel=0x01,j;
+  19   1        P2&=0x1f; //释放片选
+  20   1        for(j=0;j<6;j++)
+  21   1        {
+  22   2          P0 = bsel; //选择com
+  23   2          P2 = P2&0x1f|0xc0; //选择Y6
+  24   2          P2&=0x1f; //释放片选
+  25   2          P0 = segtab[process[j]]; //显示数码管段码值
+  26   2          if((j == 1 || j == 3) && *flash == 0x01) //小数点闪烁
+  27   2            P0 &= 0x7f; 
+  28   2          P2 = P2&0x1f|0xe0;//选择Y7
+  29   2          Delay1ms();
+  30   2          bsel = _crol_(bsel,1); //向左移一位
+  31   2          P0 |= 0xff;
+  32   2          P2&=0x1f; //释放片选
+  33   2        }
+  34   1      }
+  35          
+  36          void HourFlash(u8 *process , u8 *flash_time)
+  37          {
+  38   1         u8 bsel=0x01,j;
+  39   1        P2&=0x1f; 
+  40   1        for(j=0;j<6;j++)
+  41   1        {
+  42   2          P0 = bsel; 
+  43   2          P2 = P2&0x1f|0xc0;
+  44   2          P2&=0x1f; 
+  45   2          P0 = segtab[process[j]];
+  46   2          if((j == 0 || j == 1) && *flash_time == FLASH_FLAG) //小时闪烁
+  47   2            P0 |= 0xff; 
+  48   2          P2 = P2&0x1f|0xe0; 
+  49   2          Delay1ms();
+  50   2          bsel = _crol_(bsel,1); 
+  51   2          P0 |= 0xff;
+  52   2          P2&=0x1f; 
+  53   2        }  
+  54   1      }
+C51 COMPILER V9.57.0.0   SEGLED                                                            09/20/2020 12:04:25 PAGE 2   
+
+  55          
+  56          void MinFlash(u8 *process , u8 *flash_time)
+  57          {
+  58   1         u8 bsel=0x01,j;
+  59   1        P2&=0x1f; 
+  60   1        for(j=0;j<6;j++)
+  61   1        {
+  62   2          P0 = bsel; 
+  63   2          P2 = P2&0x1f|0xc0; 
+  64   2          P2&=0x1f; 
+  65   2          P0 = segtab[process[j]];
+  66   2          if((j == 2 || j == 3) && *flash_time == FLASH_FLAG) //分时闪烁
+  67   2           P0 |= 0xff; 
+  68   2          P2 = P2&0x1f|0xe0; 
+  69   2          Delay1ms();
+  70   2          bsel = _crol_(bsel,1); 
+  71   2          P0 |= 0xff;
+  72   2          P2&=0x1f; 
+  73   2        }  
+  74   1      }
+  75          
+  76          void SecFlash(u8 *process , u8 *flash_time)
+  77          {
+  78   1         u8 bsel=0x01,j;
+  79   1        P2&=0x1f;
+  80   1        for(j=0;j<6;j++)
+  81   1        {
+  82   2          P0 = bsel; 
+  83   2          P2 = P2&0x1f|0xc0; 
+  84   2          P2&=0x1f; 
+  85   2          P0 = segtab[process[j]];
+  86   2              if((j == 4 || j == 5) && *flash_time == FLASH_FLAG) //秒时闪烁
+  87   2           P0 |= 0xff; 
+  88   2          P2 = P2&0x1f|0xe0; 
+  89   2          Delay1ms();
+  90   2          bsel = _crol_(bsel,1); 
+  91   2          P0 |= 0xff;
+  92   2          P2&=0x1f; 
+  93   2        }  
+  94   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    395    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      24
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

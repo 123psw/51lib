@@ -1,0 +1,123 @@
+C51 COMPILER V9.57.0.0   I2C                                                               09/17/2020 15:09:26 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\i2c.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE ..\FsBSP\src\i2c.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\FsBSP\inc;..\USER)
+                    - DEBUG OBJECTEXTEND PRINT(.\Listings\i2c.lst) TABS(2) OBJECT(.\Objects\i2c.obj)
+
+line level    source
+
+   1          #include "i2c.h"
+   2          
+   3          void Delay1us()   //@12.000MHz
+   4          {
+   5   1        _nop_();
+   6   1      }
+   7           
+   8          void I2C_Start()
+   9          {
+  10   1         SDA = 1;
+  11   1         SCL = 1;
+  12   1         Delay1us();
+  13   1         SDA = 0;
+  14   1         Delay1us();
+  15   1         SCL = 0;
+  16   1         Delay1us();
+  17   1      } 
+  18          
+  19          void I2C_Stop()
+  20          {
+  21   1         SDA = 0;
+  22   1         SCL = 1;
+  23   1         Delay1us();
+  24   1         SDA = 1;
+  25   1         Delay1us();
+  26   1      }
+  27          
+  28          void I2C_Ack(u8 ack)
+  29          {
+  30   1        if(ack)
+  31   1          SDA=1;
+  32   1        else
+  33   1          SDA=0;
+  34   1        SCL=0;
+  35   1        Delay1us();
+  36   1        SCL=1;
+  37   1        Delay1us();
+  38   1        SCL=0;
+  39   1      }
+  40          
+  41          bit I2C_WaitAck()
+  42          {
+  43   1        u8 i=200;
+  44   1        SDA=1;
+  45   1        Delay1us();
+  46   1        SCL=1;
+  47   1        while(SDA)
+  48   1        {
+  49   2          i--;
+  50   2          if(!i)
+  51   2          {
+  52   3            IIC_Stop();
+*** WARNING C206 IN LINE 52 OF ..\FsBSP\src\i2c.c: 'IIC_Stop': missing function-prototype
+  53   3            return 0;
+C51 COMPILER V9.57.0.0   I2C                                                               09/17/2020 15:09:26 PAGE 2   
+
+  54   3          }
+  55   2        }
+  56   1        SCL=0;
+  57   1        SDA=1;
+  58   1        return 1;
+  59   1      }
+  60          
+  61          void I2C_SendByte(u8 dat)
+  62          {
+  63   1        u8 a=0;
+  64   1        EA = 0;
+  65   1        for(a=0;a<8;a++)
+  66   1         {   
+  67   2           SDA=dat&0x80;
+  68   2           dat=dat<<1; 
+  69   2           Delay1us();
+  70   2           SCL = 1;
+  71   2           Delay1us();
+  72   2           SCL = 0;
+  73   2           Delay1us();
+  74   2         }
+  75   1         EA = 1;
+  76   1      }
+  77          
+  78          u8 I2C_ReadByte()
+  79          {
+  80   1        u8 a=0,dat=0;
+  81   1        EA = 0;
+  82   1        SDA = 1;
+  83   1        Delay1us();
+  84   1        for(a=0;a<8;a++)
+  85   1        {
+  86   2          SCL = 1;
+  87   2          Delay1us();
+  88   2          dat<<=1;
+  89   2          dat|=SDA;
+  90   2          Delay1us();
+  91   2          SCL = 0;
+  92   2          Delay1us();
+  93   2        }
+  94   1        EA = 1;
+  95   1        return dat;
+  96   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    152    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
