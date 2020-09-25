@@ -1,0 +1,58 @@
+C51 COMPILER V9.57.0.0   UART0                                                             06/28/2020 16:47:58 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE UART0
+OBJECT MODULE PLACED IN .\Objects\uart0.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE uart0.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\uar
+                    -t0.lst) TABS(2) OBJECT(.\Objects\uart0.obj)
+
+line level    source
+
+   1          #include "uart0.h"
+   2          
+   3          void InitUART(void)
+   4          {
+   5   1        TH1=0XFD;
+   6   1        TL1=TH1;
+   7   1        TMOD |= 0x20;
+   8   1        SCON = 0X50;
+   9   1        ES=1;
+  10   1        TR1=1;
+  11   1        TI=0;
+  12   1        RI=0;
+  13   1        EA = 1;
+  14   1      }
+  15            
+  16          void putbuf(char c)
+  17          {
+  18   1        SBUF = c;
+  19   1        while(!TI)
+  20   1        {
+  21   2        }
+  22   1        TI =0;
+  23   1      }
+  24          
+  25          void putall(char *s,unsigned int con)
+  26          {
+  27   1        unsigned int ab=0;
+  28   1        while(ab < con)
+  29   1        {
+  30   2          putbuf(*s);
+  31   2          s++;
+  32   2          ab++;
+  33   2        }
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     69    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,66 @@
+C51 COMPILER V9.57.0.0   PCF8563                                                           06/28/2020 16:47:58 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE PCF8563
+OBJECT MODULE PLACED IN .\Objects\PCF8563.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE PCF8563.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\P
+                    -CF8563.lst) TABS(2) OBJECT(.\Objects\PCF8563.obj)
+
+line level    source
+
+   1          #include "PCF8563.h"
+   2          
+   3          void Delay40ms()    //@11.0592MHz
+   4          {
+   5   1        unsigned char i, j, k;
+   6   1        _nop_();
+   7   1        _nop_();
+   8   1        i = 2;
+   9   1        j = 175;
+  10   1        k = 75;
+  11   1        do
+  12   1        {
+  13   2          do
+  14   2          {
+  15   3            while (--k);
+  16   3          } while (--j);
+  17   2        } while (--i);
+  18   1      }
+  19          
+  20          void PCF8563_Write_Date(Date date)
+  21          {
+  22   1        AT24c02_Write(0xa2,0x05,date.day);
+  23   1        AT24c02_Write(0xa2,0x07,date.mouth);
+  24   1        AT24c02_Write(0xa2,0x08,date.year);
+  25   1      }
+  26          
+  27          void PCF8563_Read_Date(uchar *p)
+  28          {
+  29   1        p[0] = AT24c02_Read(0xa2,0x05,0xa3);
+  30   1        p[1] = AT24c02_Read(0xa2,0x07,0xa3);
+  31   1        p[2] = AT24c02_Read(0xa2,0x08,0xa3);
+  32   1      }
+  33          
+  34          void PCF8563_WritePage_Time(uchar *p)
+  35          {
+  36   1        AT24c02_WritePage(0xa2,0x02,p,3);
+  37   1      }
+  38          
+  39          void PCF8563_ReadPage_Time(uchar *p)
+  40          {
+  41   1        AT24c02_ReadPage(0xa2,0x02,0xa3,p,3);
+  42   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    145    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

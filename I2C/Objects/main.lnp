@@ -1,0 +1,10 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\IIC.obj",
+".\Objects\24c02.obj",
+".\Objects\PCF8563.obj",
+".\Objects\lcd1602.obj",
+".\Objects\user.obj",
+".\Objects\uart0.obj" 
+TO ".\Objects\main" 
+PRINT(".\Listings\main.m51") RAMSIZE(256) 
