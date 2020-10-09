@@ -1,0 +1,210 @@
+C51 COMPILER V9.57.0.0   GPIO                                                              10/09/2020 17:22:14 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE GPIO
+OBJECT MODULE PLACED IN .\Objects\GPIO.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE ..\BSP\src\GPIO.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\inc;..\User) DE
+                    -BUG OBJECTEXTEND PRINT(.\Listings\GPIO.lst) TABS(2) OBJECT(.\Objects\GPIO.obj)
+
+line level    source
+
+   1          #include  "GPIO.h"
+   2          
+   3          
+   4          //========================================================================
+   5          // 函数: u8 GPIO_Inilize(u8 GPIO, GPIO_InitTypeDef *GPIOx)
+   6          // 描述: 初始化IO口.
+   7          // 参数: GPIOx: 结构参数,请参考timer.h里的定义.
+   8          // 返回: 成功返回0, 空操作返回1,错误返回2.
+   9          // 版本: V1.0, 2012-10-22
+  10          //========================================================================
+  11          u8  GPIO_Inilize(u8 GPIO, GPIO_InitTypeDef *GPIOx)
+  12          {
+  13   1        if(GPIO > GPIO_P5)        return 1; //空操作
+  14   1        if(GPIOx->Mode > GPIO_OUT_PP) return 2; //错误
+  15   1        if(GPIO == GPIO_P0)
+  16   1        {
+  17   2          if(GPIOx->Mode == GPIO_PullUp)    P0M1 &= ~GPIOx->Pin,  P0M0 &= ~GPIOx->Pin;   //上拉准双向口
+  18   2          if(GPIOx->Mode == GPIO_HighZ)   P0M1 |=  GPIOx->Pin,  P0M0 &= ~GPIOx->Pin;   //浮空输入
+  19   2          if(GPIOx->Mode == GPIO_OUT_OD)    P0M1 |=  GPIOx->Pin,  P0M0 |=  GPIOx->Pin;   //开漏输出
+  20   2          if(GPIOx->Mode == GPIO_OUT_PP)    P0M1 &= ~GPIOx->Pin,  P0M0 |=  GPIOx->Pin;   //推挽输出
+  21   2        }
+  22   1        if(GPIO == GPIO_P1)
+  23   1        {
+  24   2          if(GPIOx->Mode == GPIO_PullUp)    P1M1 &= ~GPIOx->Pin,  P1M0 &= ~GPIOx->Pin;   //上拉准双向口
+  25   2          if(GPIOx->Mode == GPIO_HighZ)   P1M1 |=  GPIOx->Pin,  P1M0 &= ~GPIOx->Pin;   //浮空输入
+  26   2          if(GPIOx->Mode == GPIO_OUT_OD)    P1M1 |=  GPIOx->Pin,  P1M0 |=  GPIOx->Pin;   //开漏输出
+  27   2          if(GPIOx->Mode == GPIO_OUT_PP)    P1M1 &= ~GPIOx->Pin,  P1M0 |=  GPIOx->Pin;   //推挽输出
+  28   2        }
+  29   1        if(GPIO == GPIO_P2)
+  30   1        {
+  31   2          if(GPIOx->Mode == GPIO_PullUp)    P2M1 &= ~GPIOx->Pin,  P2M0 &= ~GPIOx->Pin;   //上拉准双向口
+  32   2          if(GPIOx->Mode == GPIO_HighZ)   P2M1 |=  GPIOx->Pin,  P2M0 &= ~GPIOx->Pin;   //浮空输入
+  33   2          if(GPIOx->Mode == GPIO_OUT_OD)    P2M1 |=  GPIOx->Pin,  P2M0 |=  GPIOx->Pin;   //开漏输出
+  34   2          if(GPIOx->Mode == GPIO_OUT_PP)    P2M1 &= ~GPIOx->Pin,  P2M0 |=  GPIOx->Pin;   //推挽输出
+  35   2        }
+  36   1        if(GPIO == GPIO_P3)
+  37   1        {
+  38   2          if(GPIOx->Mode == GPIO_PullUp)    P3M1 &= ~GPIOx->Pin,  P3M0 &= ~GPIOx->Pin;   //上拉准双向口
+  39   2          if(GPIOx->Mode == GPIO_HighZ)   P3M1 |=  GPIOx->Pin,  P3M0 &= ~GPIOx->Pin;   //浮空输入
+  40   2          if(GPIOx->Mode == GPIO_OUT_OD)    P3M1 |=  GPIOx->Pin,  P3M0 |=  GPIOx->Pin;   //开漏输出
+  41   2          if(GPIOx->Mode == GPIO_OUT_PP)    P3M1 &= ~GPIOx->Pin,  P3M0 |=  GPIOx->Pin;   //推挽输出
+  42   2        }
+  43   1        if(GPIO == GPIO_P4)
+  44   1        {
+  45   2          if(GPIOx->Mode == GPIO_PullUp)    P4M1 &= ~GPIOx->Pin,  P4M0 &= ~GPIOx->Pin;   //上拉准双向口
+  46   2          if(GPIOx->Mode == GPIO_HighZ)   P4M1 |=  GPIOx->Pin,  P4M0 &= ~GPIOx->Pin;   //浮空输入
+  47   2          if(GPIOx->Mode == GPIO_OUT_OD)    P4M1 |=  GPIOx->Pin,  P4M0 |=  GPIOx->Pin;   //开漏输出
+  48   2          if(GPIOx->Mode == GPIO_OUT_PP)    P4M1 &= ~GPIOx->Pin,  P4M0 |=  GPIOx->Pin;   //推挽输出
+  49   2        }
+  50   1        if(GPIO == GPIO_P5)
+  51   1        {
+  52   2          if(GPIOx->Mode == GPIO_PullUp)    P5M1 &= ~GPIOx->Pin,  P5M0 &= ~GPIOx->Pin;   //上拉准双向口
+  53   2          if(GPIOx->Mode == GPIO_HighZ)   P5M1 |=  GPIOx->Pin,  P5M0 &= ~GPIOx->Pin;   //浮空输入
+  54   2          if(GPIOx->Mode == GPIO_OUT_OD)    P5M1 |=  GPIOx->Pin,  P5M0 |=  GPIOx->Pin;   //开漏输出
+C51 COMPILER V9.57.0.0   GPIO                                                              10/09/2020 17:22:14 PAGE 2   
+
+  55   2          if(GPIOx->Mode == GPIO_OUT_PP)    P5M1 &= ~GPIOx->Pin,  P5M0 |=  GPIOx->Pin;   //推挽输出
+  56   2        }
+  57   1        return 0; //成功
+  58   1      }
+  59          
+  60          //========================================================================
+  61          // 函数: u8 GPIO_WritePin(u8 GPIO , u8 Pinx , bit Level)
+  62          // 描述: 实现写入引脚高低电平
+  63          // 参数: GPIO ：选择P0,P1,P2,P3端口
+  64          //       Pinx ：Px^0~Px^7 
+  65          //       Level: LOW 0 ，HIGH  1
+  66          // 返回: 成功返回0, 空操作返回1,错误返回2.
+  67          //========================================================================
+  68          u8 GPIO_WritePin(u8 GPIO , u8 Pinx , bit Level)
+  69           { 
+  70   1         if(GPIO > GPIO_P5)       return 1; //空操作
+  71   1         if(Pinx > GPIO_Pin_All)  return 2; //错误
+  72   1         if(GPIO == GPIO_P0)     //选择P0端口
+  73   1          {
+  74   2           if(Level)
+  75   2            P0 |= Pinx;        //选择的端口引脚置1
+  76   2           else
+  77   2            P0 &= (~Pinx);     //选择的端口引脚置0
+  78   2          }
+  79   1         if(GPIO == GPIO_P1)  //选择P1端口
+  80   1          {
+  81   2           if(Level)
+  82   2            P1 |= Pinx;
+  83   2           else
+  84   2            P1 &= (~Pinx);
+  85   2          }
+  86   1          if(GPIO == GPIO_P2)
+  87   1          {
+  88   2           if(Level)
+  89   2            P2 |= Pinx;
+  90   2           else
+  91   2            P2 &= (~Pinx);
+  92   2          }
+  93   1          if(GPIO == GPIO_P3)
+  94   1          {
+  95   2           if(Level)
+  96   2            P3 |= Pinx;
+  97   2           else
+  98   2            P3 &= (~Pinx);
+  99   2          }
+ 100   1          if(GPIO == GPIO_P4)
+ 101   1          {
+ 102   2           if(Level)
+ 103   2            P4 |= Pinx;
+ 104   2           else
+ 105   2            P4 &= (~Pinx);
+ 106   2          }
+ 107   1          if(GPIO == GPIO_P5)
+ 108   1          {
+ 109   2           if(Level)
+ 110   2            P5 |= Pinx;
+ 111   2           else
+ 112   2            P5 &= (~Pinx);
+ 113   2          }
+ 114   1          return 0;
+ 115   1       }
+ 116           
+C51 COMPILER V9.57.0.0   GPIO                                                              10/09/2020 17:22:14 PAGE 3   
+
+ 117           
+ 118           bit GPIO_ReadPin(u8 GPIO , u8 Pinx)
+ 119           {
+ 120   1         if(GPIO == GPIO_P0)     //选择P0端口
+ 121   1          {
+ 122   2            if((P0 & Pinx) == Pinx)
+ 123   2              return HIGH;
+ 124   2            else
+ 125   2              return LOW;
+ 126   2          }
+ 127   1          if(GPIO == GPIO_P1)     //选择P1端口
+ 128   1          {
+ 129   2            if((P1 & Pinx) == Pinx)
+ 130   2              return HIGH;
+ 131   2            else
+ 132   2              return LOW;
+ 133   2          }
+ 134   1          if(GPIO == GPIO_P2)     //选择P2端口
+ 135   1          {
+ 136   2            if((P2 & Pinx) == Pinx)
+ 137   2              return HIGH;
+ 138   2            else
+ 139   2              return LOW;
+ 140   2          }
+ 141   1          if(GPIO == GPIO_P3)     //选择P3端口
+ 142   1          {
+ 143   2            if((P3 & Pinx) == Pinx)
+ 144   2              return HIGH;
+ 145   2            else
+ 146   2              return LOW;
+ 147   2          }
+ 148   1          if(GPIO == GPIO_P4)     //选择P4端口
+ 149   1          {
+ 150   2            if((P4 & Pinx) == Pinx)
+ 151   2              return HIGH;
+ 152   2            else
+ 153   2              return LOW;
+ 154   2          }
+ 155   1          if(GPIO == GPIO_P5)     //选择P5端口
+ 156   1          {
+ 157   2            if((P5 & Pinx) == Pinx)
+ 158   2              return HIGH;
+ 159   2            else
+ 160   2              return LOW;
+ 161   2          }
+ 162   1          return 1;
+ 163   1       }
+ 164           
+ 165           //========================================================================
+ 166          // 函数: u8 GPIO_Read8bit(u8 GPIO)
+ 167          // 描述: 实现写入引脚高低电平
+ 168          // 参数: GPIO ：选择P0,P1,P2,P3端口
+ 169          // 返回: 返回Px端口电平状态
+ 170          //========================================================================
+ 171           u8 GPIO_Read8bit(u8 GPIO)
+ 172           {
+ 173   1           if(GPIO > GPIO_P5)       return 1; //空操作
+ 174   1           if(GPIO == GPIO_P0) return P0;
+ 175   1           if(GPIO == GPIO_P1) return P1;
+ 176   1           if(GPIO == GPIO_P2) return P2;
+ 177   1           if(GPIO == GPIO_P3) return P3;
+ 178   1           if(GPIO == GPIO_P4) return P4;
+C51 COMPILER V9.57.0.0   GPIO                                                              10/09/2020 17:22:14 PAGE 4   
+
+ 179   1           return 2;
+ 180   1       }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    679    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

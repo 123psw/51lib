@@ -1,0 +1,98 @@
+C51 COMPILER V9.57.0.0   BSP_KEY                                                           10/09/2020 17:22:14 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE BSP_KEY
+OBJECT MODULE PLACED IN .\Objects\bsp_key.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE ..\BSP\src\bsp_key.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\inc;..\User)
+                    - DEBUG OBJECTEXTEND PRINT(.\Listings\bsp_key.lst) TABS(2) OBJECT(.\Objects\bsp_key.obj)
+
+line level    source
+
+   1          #include "bsp_key.h"
+   2          
+   3          u8 keyVal_o = 0;          //按键通码断码缓冲
+   4          
+   5          /* **************************************************
+   6           * 函数名称 : key_detection
+   7           * 函数描述 ：比较按键前后状态
+   8           * 输入参数 ： GPIOx 端口 ,Pinx 引脚
+   9          * 输出参数 ：key_dn  1: 按键与上次状态不一致  
+  10          ****************************************************/
+  11          bit key_detection(u8 GPIOx , u8 Pinx)
+  12          {
+  13   1         bit key_dn;
+  14   1         static bit key_o = 1;    //上一次按键状态
+  15   1         bit key_n;                 //当前按键状态
+  16   1         if(GPIO_ReadPin(GPIOx , Pinx) != LOW) //按键没被按下
+  17   1           key_n = 1;
+  18   1         else
+  19   1           key_n = 0;
+  20   1         key_dn = (key_n ^ key_o) & key_o; //判断按键是否按下
+  21   1         key_o = key_n;
+  22   1         return key_dn;
+  23   1      }
+  24          
+  25          /* **************************************************
+  26           * 函数名称 : ReadLine
+  27           * 函数描述 : 行列式键盘读取一行值
+  28           * 输入参数 ：KeyState *keystate
+  29           * 输出参数 ：无
+  30          ****************************************************/
+  31          void ReadLine(KeyState *keystate, u8 *isTime2GetKeyVal)
+  32          {
+  33   1        static u8 keyPress_o = 0x00;    //上一次按键状态
+  34   1        u8 keyVal = 0x00;   //本次读取值
+  35   1        keyVal = ~((P3 & 0x0f) | 0xf0); //读取按键,行列值拼接取反
+  36   1        if((keyVal ^ keyPress_o) & keyVal)    //若与上一次该行的记录值不同
+  37   1        {
+  38   2          *isTime2GetKeyVal = 1;            //产生译码标记   
+  39   2          if(keyVal & 0x0f)               //若按下行为
+  40   2          { 
+  41   3            *keystate = KeyDn;            //修改按键状态值（目前不构成状态机，留个坑）
+  42   3            keyVal_o = keyVal;    //按键缓存，支持延迟响应
+  43   3          }
+  44   2          else                    //若释放按键
+  45   2          {
+  46   3            *keystate = KeyUp;            //修改按键状态值（目前不构成状态机，留个坑）
+  47   3            keyVal_o = 0xaa;    //产生断码，支持延迟响应 
+  48   3          }
+  49   2        }
+  50   1        else if(keyVal & 0x0f)    //若按住
+  51   1        { 
+  52   2          *keystate = KeyHd;  
+  53   2        } 
+  54   1        else
+C51 COMPILER V9.57.0.0   BSP_KEY                                                           10/09/2020 17:22:14 PAGE 2   
+
+  55   1          *keystate = NoKey;    //无按键
+  56   1        keyPress_o = keyVal;  //记录本行读取值
+  57   1      }
+  58          
+  59          u8 GetKeyNum(void)
+  60          {
+  61   1        u8 keyNum = 0xff;     //无码
+  62   1        switch(keyVal_o)
+  63   1        {
+  64   2          case 0x01:  keyNum = 1; break;
+  65   2          case 0x02:  keyNum = 2; break;  
+  66   2          case 0x04:  keyNum = 3; break;
+  67   2          case 0x08:  keyNum = 4; break;
+  68   2          case 0xaa:  keyNum = 0xaa; break; //转发断码标记
+  69   2          default:  break;
+  70   2        }
+  71   1        return keyNum;  
+  72   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    149    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

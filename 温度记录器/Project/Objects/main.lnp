@@ -1,0 +1,10 @@
+".\Objects\STARTUP.obj",
+".\Objects\DS18B20.obj",
+".\Objects\bsp_key.obj",
+".\Objects\GPIO.obj",
+".\Objects\SEGLED.obj",
+".\Objects\DS1302.obj",
+".\Objects\main.obj",
+".\Objects\user.obj" 
+TO ".\Objects\main" 
+PRINT(".\Listings\main.m51") RAMSIZE(256) 

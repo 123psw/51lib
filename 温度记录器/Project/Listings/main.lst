@@ -1,0 +1,91 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              10/09/2020 17:22:15 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KeilC51\C51\BIN\C51.EXE ..\User\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\inc;..\User) DEBUG
+                    - OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.h>
+   2          #include "user.h"
+   3          #include "bsp_key.h"
+   4          #include "DS1302.h"
+   5          bit flash = 0;
+   6          bit ledflash = 0;
+   7          TemperatureRecordStatus tr = ParameterSettings;
+   8          KeyCount keyout;
+   9          KeyState keystate = NoKey;
+  10          u8 isTime2GetKeyVal = 0;
+  11          
+  12          void Timer0Init(void)   //20??@12.000MHz
+  13          {
+  14   1        AUXR &= 0x7F;   //?????12T??
+  15   1        TMOD &= 0xF0;   //???????
+  16   1        TL0 = 0xE0;   //??????
+  17   1        TH0 = 0xB1;   //??????
+  18   1        TF0 = 0;    //??TF0??
+  19   1        TR0 = 1;    //???0????
+  20   1      }
+  21          
+  22          void init_EA()
+  23          {
+  24   1        EA = 1;
+  25   1        ET0 = 1;
+  26   1      }
+  27          
+  28          void timer0() interrupt 1
+  29          {
+  30   1        static u8 cnt = 0;
+  31   1        cnt++;
+  32   1        ReadLine(&keystate ,&isTime2GetKeyVal);
+  33   1        if(cnt % 10 == 0) ledflash = ~ledflash;
+  34   1        if(cnt % 25 == 0) flash = ~ flash;
+  35   1        if(cnt >= 250) cnt = 0;
+  36   1      }
+  37          void main()
+  38          {
+  39   1        u8 time[] ={45,23,10};
+  40   1        u8 dbuf[]={0,0,0,0,0,0,0,0};
+  41   1        u8 wendu[] = {0,0,0,0,0,0,0,0,0,0};
+  42   1        init_IO();
+  43   1        Timer0Init();
+  44   1        init_EA();
+  45   1        writetime(time);
+  46   1        while(1)
+  47   1        {
+  48   2          if(isTime2GetKeyVal)
+  49   2          {
+  50   3            isTime2GetKeyVal=0;
+  51   3            ExecTemperature(GetKeyNum(),&tr,&keyout);
+  52   3            display(GetKeyNum(),&keyout);
+  53   3          }
+  54   2          switch(tr)
+C51 COMPILER V9.57.0.0   MAIN                                                              10/09/2020 17:22:15 PAGE 2   
+
+  55   2          {
+  56   3            case ParameterSettings: ParameterSettingInterface(keyout.S4); break;
+  57   3            case ConfirmTheAcquisition: TimeShow(time,dbuf,keyout,wendu,&tr); keyout.S5 = 1;TimeFlash(dbuf,flash
+             -); break;
+  58   3            case TemperatureDisplay: 
+  59   3              if(GetKeyNum() == 3)
+  60   3               LedFlash(ledflash);
+  61   3              TemperatureAcquisitionDisplayInterface(keyout.S6,dbuf,wendu); break;
+  62   3          }
+  63   2        }
+  64   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    377    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
